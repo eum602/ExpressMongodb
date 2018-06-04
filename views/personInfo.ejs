@@ -1,0 +1,11 @@
+<!--This is views/personInfo.ejs-->
+<!--debemos ponercada codigo javascript entre llaves y porcentaje--> 
+<form action="/update" method="POST">
+    Name: <%= person.name%> <br>
+    <input name="username" value="<%= person.name%>" hidden>
+    Age:  <input name="age" value="<%= person.age%>">
+    <input type="submit" value="update">
+</form>
+
+<br><a href="/public/files/mongoform1.html">Create New person</a>
+<br><a href="/all">Show all</a>

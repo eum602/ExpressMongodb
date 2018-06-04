@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Book Finder</title>
+        <!--<script src="jquery-3.3.1.js"></script> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <form>
+            Title:<input name="title"><br>
+            Author:<input name="author"><br>
+            Year:<input name="year"><br>
+        </form>
+        <ul>
+            <div id="results"></div>
+       
+        </ul>
+        <script>
+            //se usará jquery para escribir este codigo
+            $("input").on("change input textInput",()=>{
+                //la funcion on esta escuchando lo que pasa con los inputs,
+                //en este caso ante cualquiera de los eventos ya sea change o 
+                //input o textInput; estos eventos son llamados asi por los diferentes
+                //browsers; asimismo estos eventos se activan cuando el cliente tipea 
+                //cualquier cosa en el inputfield;
+                //Luego la funcion on llamara una callback function
+                //que hará lo que abajo se menciona
+                var title = $("input[name='title']").val();
+                var author = $("input[name='author']").val();
+                var year = $("input[name='year']").val();
+
+                var query = '?';
+
+                if(title) query += 'title=' + title + '&';
+                if(author) query += 'name=' + author + '&';
+                if(year) query += 'year=' + year + '&';
+
+                var url = 'http://localhost:3000/api/' + query;//construyendo la url desde
+                //donde se requerira la data al servidor
+
+                $.getJSON(url,(books,status)=>{//usando la libreria ajax con su funcion getJSON
+                    //gerJSON envia el http request a la url 'url' y luego define una callback function
+                    //cuando la data JSON viene como respuesta del servidor
+                    //lo que regresa del servidor es books, en el ejemplo no estoy usando el status 
+                    //pero puede ser utilizado para manejar los errores o mostrarlos al usuario
+                    var results = $("#results");//selecciono el div con el id de nombre results
+                    results.html('');//limpio lo que estaba ahí
+                    books.forEach((book)=>{
+                        results.append('<li><i>'+book.title+'</i>, ');
+                        book.authors.forEach((author)=>{
+                            if(author.name) results.append(author.name + ', ');
+                        });
+                        results.append(book.year + '</li>');
+                    });
+                });
+            });      
+        </script>
+    </body>
+</html>

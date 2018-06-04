@@ -1,0 +1,14 @@
+<!--This is views/showAnimals.ejs-->
+<!--debemos ponercada codigo javascript entre  llaves y porcentaje--> 
+
+Hello, <%= name %>, nice to meet you.
+<p> Here are the animals you like:
+<ul>
+    <%animals.forEach((animal)=>{ %>
+        <li>  <%= animal %>  </li>
+        <%}); %>
+</ul>
+
+<a href='/formularios'> Back to Form</a>
+
+

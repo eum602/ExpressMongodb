@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <style>
+    circle:hover{
+        fill:green
+    }
+    </style>
+<head>
+    <title>Intro To D3</title>   
+    <script src="https://d3js.org/d3.v5.min.js"></script> 
+</head>
+
+<body>
+        <div>
+<svg width="400" height="400"> {/*se crea una region del tamaño especificado*/}
+        <circle cx="50" cy="50" r="40" 
+          stroke = "blue" stroke-width="4" fill="yellow"/>
+           <!--
+           {/*circle cx y cy son
+          las coordenadas tomadas desde el lado superior izquiedo de la region definida
+          en el svg*
+          stroke:color de la CIRCUNFERENCIA circunscrita
+          stroke-width: espesor de linea de circunferencia circunscrita
+          fill:color de relleno
+          Notar que se está usando el estilo css llamado App-circle que he creado dentro
+          del archivo App.css y luego lo he importado a este archivo con import '../App.css';
+          */} -->
+
+        <rect x="50" y="20" rx="20" ry="20"
+        width = "150" height ="150"
+        style="fill: red;stroke: black;stroke-width: 5;opacity: 0.5"
+        onclick="style.fill='cyan'"/>
+
+</svg>
+</div>
+
+<div>
+
+<!--usando D3-->
+<svg width="400" height="400"> 
+        <circle/> <!--circulo sin atributos-->
+</svg>
+
+</div>
+
+
+
+<script>//acqui se le darán atributos al circulo
+//creando un objeto cualquiera en javascript
+var circle = {
+    x:50,
+    y:40,
+    r:40,
+    stroke :'blue',
+    width : 4,
+    fill : 'yellow'
+};
+var svg = d3.select('svg');//se selecciona el elemento svg de d3
+svg.select('circle')//dentro de los elementos del svg voy a seleccionar el circulo
+.attr("cx",circle.x)//eligiendo la coordenada x del centro del circulo (cx)
+//y ajustandola a la propiedad x del circulo creado como objeto (circle.x)
+.attr("cy",circle.cy)
+.attr("r",circle.r)
+.style("stroke",circle.stroke)
+.style("stroke-width",circle.width)
+//.style("fill",circle.fill);
+.style("fill",()=>{
+    if(circle.r < 50)
+    return 'yellow'
+    else
+    return 'cyan'
+});
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>Mouse Over, Mouse Out</title>
+
+
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react.js"> </script> 
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react-dom.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div id='container'></div>
+
+<script type="text/babel">
+class ArticlesGrid extends React.Component{
+    ///////constructor
+    constructor(props){
+        super(props);
+        this.state = {
+            articles: []
+        };
+    }
+
+
+
+componentDidMount () {
+ var API_KEY = '2f748c5233b34dc1aa3e1d0a4e81fd1e'; // replace this with the API key you obtained from https://developer.nytimes.com/
+ var query = location.search ? (location.search.split('?q=')[1]).split('&')[0] : 'all';
+ var url=
+     'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + query + '&api-key=' + API_KEY;
+  $.getJSON(url, function(data, status) {
+                    return this.setState({articles: this.parse(data)});
+                 }.bind(this));
+}
+
+
+
+parse(results) {
+  if(!results || !results.response) return [];
+  var articles = results.response.docs;
+  var parsedArticles = [];
+  for(var i = 0; i < articles.length; i++) {
+    var article = articles[i];
+    if (article.multimedia.find(this.checkXLarge)) {
+      parsedArticles.push({
+        id: article._id,
+        title:    article.headline.main || 'Untitled',
+        imageURL: article.multimedia.find(this.checkXLarge).url || '#',
+        webURL:   article.web_url || '#'
+      });
+    }
+  }
+  return parsedArticles;
+}
+
+checkXLarge(image) {
+  return image.subtype === 'xlarge';
+}
+
+
+
+
+render () {
+  return this.state.articles && (
+    <div className='articles'>
+      { this.state.articles.map( function (article) {
+        return <Article article={article} key={article._id} />;
+      })}
+    </div>
+  );
+}
+
+
+
+}
+
+//ahora se creará un nuevo componente que permitira mostrar cada articulo
+//usaremos la abreviatura de un componente, es decir que este es un componente
+//pero abreviado que solo tiene la funcion de render.
+
+var Article = function({article}) {
+  var imgURL = 'https://static01.nyt.com/' + article.imageURL;
+  return (
+    <div className='article'>
+      <a className='article-link' href={article.webURL}>
+        <img className='article-image' 
+             title={article.title} 
+             src={imgURL} 
+        />
+      </a>
+    </div>
+  ); 
+}
+
+
+ReactDOM.render(<ArticlesGrid/>, document.getElementById('container'));
+
+
+</script>
+
+</body>
+
+</html>
+    

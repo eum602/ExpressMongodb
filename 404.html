@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>USING DATA WITH D3</title>   
+    <script src="https://d3js.org/d3.v4.min.js"></script> 
+</head>
+
+<body>
+<!------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------->
+<!---->
+<div>
+<br><br>
+<hr></hr>
+<h2>Bar chart creado usando D3</h2>   
+<svg class="chart" height="900" width="900">    
+</svg>
+</div>
+
+<script>
+    ///////////////////////////////DATA/////////////////////////////////////////////
+    var values = [
+        {price:700 , sqft:3000, br:3, pets:['cats','dogs']},
+        {price:445 , sqft:1700, br:2, pets:[]},
+        {price:421 , sqft:1455, br:2, pets:['cats','dogs']},
+        {price:411 , sqft:1314, br:2, pets:['dogs']},
+        {price:275 , sqft:1200, br:1, pets:['cats']},
+        {price:500 , sqft:650, br:1, pets:[]},
+    ];
+
+    /////////////////DRAWING THE VALUES/////////////////////////////////////////////
+
+    var svg = d3.select("svg");
+    var selection = svg.selectAll("g")
+        .data(values)
+        .enter()
+        .append("g")
+        .attr("transform","translate(10,10)");
+    
+    selection.append("circle")
+             .attr("cx",(d,i)=>{
+                return d.price/2;
+             })
+             .attr("cy",(d,i)=>{
+                 return (4000-d.sqft)/(4000/400);
+             })
+             .attr("r",(d,i)=>{
+                return d.br*10;
+             })
+             .style("fill",(d,i)=>{
+                return color(d.pets)
+             })
+             .style("opacity",'0.5')
+             .append("svg:title").text((d,i)=>{
+                 return print(d)
+             });
+
+
+
+        function color(pets){
+            var dogs=pets.indexOf("dogs") !=-1;
+            var cats=pets.indexOf("cats") !=-1;
+            if(dogs)
+                return cats ? 'purple' : 'blue'
+            else
+                return cats ? 'red' : 'gray'
+        }
+
+        function print(home){
+            return `$${home.price}K, ${home.sqft}sqft, ${home.br} BR's` //el primer dolar
+            //es solo texto, que indica el precio en dolares
+        }
+
+
+        /////////////////creando los ejes/////////////////////////////////////////////
+        var width = 400;//cantidad de espacio a usar para dibujar los valores
+        var height = 400;
+        //draw the x-axis
+        var xScale = d3.scaleLinear() //funcion de D3 para especificar el domain and range
+            .domain([0,width*2]) //valores reales posible a MOSTRAR en el eje X
+            .range([0,width]); //valores a extrapolar en tamaño de pantalla, tamaño de pantalla
+            //a usar que obviamente esta dentro de los valores del svg creado
+        var xAxis = d3.axisBottom(xScale); //se crean las marcas de señal detras del eje
+        svg.append("g") //se adjuntara un elemento "g" nuevo.
+            .attr("transform","translate(10,410)") //se ubica el elemento g en la coord.
+            //indicada
+            .call(xAxis);//se dibuja el eje X
+        
+        //draw the y-axis
+        var yScale =d3.scaleLinear()
+            .range([height,0])//el origen esta en topleft y desde ahi el eje y empieza descendiendo
+            .domain([0,4000]);
+        var yAxis = d3.axisRight(yScale);
+        svg.append("g")
+            .attr("transform","translate(10,10)")
+            .call(yAxis);
+</script>
+
+</body>
+</html>

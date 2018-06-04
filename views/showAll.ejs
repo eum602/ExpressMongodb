@@ -1,0 +1,15 @@
+<!--This is views/created.ejs-->
+<!--debemos ponercada codigo javascript entre llaves y porcentaje--> 
+
+Here are all the people:
+<ul>
+    <% people.forEach((person)=>{%>
+        <li><a href="/person?name=<%=person.name%>">
+        <%=person.name%></a>:
+        <%=person.age%>
+        </li>
+                
+    <% }); %>
+</ul>
+<br> <a href="/public/files/mongoform1.html">Create a new person</a>
+

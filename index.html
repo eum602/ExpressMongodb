@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>Mouse Over, Mouse Out</title>
+
+
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react.js"> </script> 
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react-dom.js"></script>
+</head>
+
+<body>
+    
+
+        <div id="container"></div>
+        <script type="text/babel">
+        class Multiplier extends React.Component{
+            /////constructor
+            constructor(props){
+                super(props);
+                this.state = {input1 : 0 , input2 : 0 , product : 0};
+                this.multiply = this.multiply.bind(this);//lo que se
+                //está haciendo es crear una PROPIEDAD dentro del OBJETO CONSTRUCTOR
+                // y luego se le esta asignando su propia funcion.
+            }
+            ////////funcion multiplicadora que lineas arriba ha sido asignada
+            //a la propiedad que lleva su mismo nobre
+            multiply(id , val) {
+                if(id == 1) {
+                    this.setState( {input1:val , product: val*this.state.input2});
+                }
+                else if(id== 2){
+                    this.setState({input2:val , product:val*this.state.input1});
+                }
+            }
+            //////////
+            render(){
+                return(//lo que se hará es crear dos componentes dentro del componentes
+                // los cuales son (NumberInputField y OutputField ) dentro del componente
+                //mayor llamado Multiplier.
+                //action es una propiedad asignada a NumberInputField, esa propiedad 
+                //está enlazada a una propiedad del componente Multiplier llamado multiply.
+                    <div>
+                    <NumberInputField id = "1" action = {this.multiply} />
+                    <NumberInputField id = "2" action = {this.multiply} />
+                    <OutputField product = {this.state.product} />
+                    </div>
+                );
+            }
+        }
+
+        class NumberInputField extends React.Component {
+            constructor(props){
+                super(props);
+                this.handleChange = this.handleChange.bind(this);
+            }            
+        
+
+        handleChange(e) {
+            this.props.action(this.props.id , e.target.value);
+        }
+
+        render(){
+            return(<input onChange = {this.handleChange}></input>);
+            //se asigna al evento cambio ("onChange") la propiedad
+            //handleChange la cual a su vez está ligada a la funcion handleChange(e)
+            //cuando se ingresa un valor por el input, entonces el id y el valor
+            //del input ingresan a la funcion handleChange, la cual a su vez llama a la
+            //propiedad action de la clase InputField, asimismo action esta ligada a la
+            //propiedad multiply de otra clase!! llamada Multiplier en su funcion multiply
+            //Luego como el programa se ha desplazado hasta la clase Multiplier y se ha realizado
+            //un setState en la funcion multilply, entonces Multiplier hará un Rerenderizado
+            //y como e observa en ese renderizado se encuentra trambien la funcion OutputField,
+            //ahora OutputField se pasa a describir
+
+        }
+
+        }
+
+        class OutputField extends React.Component{
+            render(){
+                return(
+                    <div> The product is {this.props.product} </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<Multiplier/>,document.getElementById('container'));
+        
+        </script>
+
+</body>

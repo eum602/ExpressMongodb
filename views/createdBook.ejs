@@ -1,0 +1,29 @@
+<!--This is views/createdBook.ejs-->
+<!--debemos ponercada codigo javascript entre  llaves y porcentaje--> 
+
+Succesfully created new book:
+<p>
+Title: <%= book.title %>
+<p>
+Year: <%= book.year%>
+<p>
+<%book.authors.forEach((author)=>{%>
+    <ul>
+    <li>
+    <%if(author.name){%>
+        <%=author.name%>, <%=author.affiliation%>
+    <%}%>
+    </li>
+    </ul>
+<%});%>
+<p>
+<br><a href="/bookform">Create New Book</a>
+<br><a href="/allBooks">Show All Books</a>
+<br><a href="/searchBook">Realizar una búsqueda</a>
+
+
+
+
+
+
+
